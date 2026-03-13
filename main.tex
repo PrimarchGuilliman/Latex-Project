@@ -1,0 +1,855 @@
+\documentclass{article}
+\usepackage{graphicx} % Required for inserting images
+
+\title{Paradoxe Banach Tarski mémoire}
+\date{Avril 2024}
+\usepackage{tikz}
+\usetikzlibrary{positioning}
+\usepackage[french]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{tcolorbox}
+\usepackage{amsmath}
+\tcbuselibrary{breakable} 
+\newtcolorbox{definitionbox}{colback=lightblue!10!white, colframe=black, boxrule=0.5mm, boxsep=2mm, breakable}
+
+\usepackage[utf8]{inputenc}
+\usepackage{xcolor} % pour la définition des couleurs
+\usepackage{tcolorbox}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{lipsum}
+\usepackage{fourier}
+\tcbuselibrary{breakable}
+
+
+\definecolor{lightblue}{RGB}{173,216,230}
+\newtcolorbox{definitionbox}{colback=lightblue, colframe=black, boxrule=0.5mm, boxsep=2mm, breakable}
+
+\usepackage[a4paper,top=2cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
+
+% Useful packages
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{amssymb}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+
+\title{Le paradoxe de Banach Tarski}
+\author{Noah Wurtz, Demba Sanneh, Abdelouahab Merniz}
+\usepackage[T1]{fontenc}
+\usepackage{amssymb}
+\usepackage{mdframed}
+\newmdenv[backgroundcolor=lightblue]{defbox}
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Le document suivant est un mémoire de licence 3 de mathématiques fondamentales, portant sur le paradoxe de Banach Tarski. Il présuppose des acquis en algèbre et en théorie des groupes vus lors des semestres précédents de la licence de mathématiques fondamentales.\\~\\
+
+\underline{Notation}:
+\begin{itemize}
+    \item Les termes que nous définissons sont italisés et grasseyés. 
+Exemple: "\textit{\textbf{Un chat}} est une espèce de mammifères carnivores, de la famille des Félidés." Dans ce cas "Un chat" est italisé et grasseyé car c'est le terme que nous cherchons à définir.\\
+Les définitons sont précédées par des chiffres naturels en ordre croissant, de sorte à pouvoir être facilement retrouvable en cas de rappel. À chaque début de sous partie, la numérotation des définitions reprend depuis le chiffre 1.\\
+Exemple: Si nous faisons référence à la  "partie 2.1 définition 2)", nous faisons référence à la définiton de "famille génératrice libre de G".
+    \item Les lemmes, propositions, théorèmes et corollaire sont précédés par une lettre de l'alphabet, en ordre alphabétique, de sorte à pouvoir être facilement retrouvable en cas de rappel. Pour chaque sous partie l'alphabétisation reprend depuis la lettre a.\\
+    Exemple: Si nous faisons référence à "Partie 2.2 Lemme a)" nous faisons référence au Lemme suivant: "$\mathcal{R}$ est une relation d'équivalence".
+    
+\end{itemize}
+
+
+\end{abstract}
+\\~\\
+\section{\underline{Introduction}}
+
+Le paradoxe est une notion fondamentale en mathématiques depuis des millénaires. Les paradoxes de Zénon, ou encore le paradoxe de Russell ayant mené au célèbre théorème d’incomplétude de Gödel, nombreux sont-ils ces paradoxes ayant façonné les mathématiques.\\
+\\
+En mathématiques, il existe deux types de Paradoxes:\\
+- Les résultats simplement faux, qui contredisent l’énoncé et sont donc impossibles.\\
+- Les résultats contre intuitifs, qui semblent aux premiers abords impossibles ou illogiques.\\
+\\
+Nous nous intéresserons à travers ce mémoire à un cas particulier de la seconde définition, au paradoxe de Banach Tarski. \\
+Ce théorème connu sous le nom de paradoxe de Banach Tarski, est un énoncé mathématique démontré dans le système axiomatique des mathématiques modernes; la théorie ZFC, qui défie à première vue la rationalité du commun des mortels. \\
+
+{\Large \underline{Théorème}}:\\
+\begin{center}
+     La sphère $S^2$ est SO(3) paradoxal.\\
+\end{center}\\~\\
+
+En fait, cela revient à dire que la sphère unité peut être décomposée en un nombre fini de morceaux tels que, en utilisant des rotations du groupe SO(3), ces morceaux peuvent être réarrangés pour former deux copies de la sphère originale.\\
+Bien que cela nous  semble intuitivement impossible au premier abord, ce théorème a bel et bien été démontré en 1924 par les mathématiciens Stefan Banach et Alfred Tarski.
+
+%Your introduction goes here! Simply start writing your document and use the Recompile button to view the updated PDF preview. Examples of commonly used commands and features are listed below, to help you get started. Once you're familiar with the editor, you can find various project settings in the Overleaf menu, accessed via the button in the very top left of the editor. To view tutorials, user guides, and further documentation, please visit our \href{https://www.overleaf.com/learn}{help library}, or head to our plans page to \href{https://www.overleaf.com/user/subscription/plans}{choose your plan}.
+\pagebreak
+\section{\underline{Notions de Base: Définitions et Théorèmes}}
+
+Avant d'aborder le théorème principale, nous présenterons des définitons, lemmes, propositions et théorèmes qui nous ont aidés à comprendre ce sujet.\\
+Les démontsrations ainsi que des remarques particulières se trouveront en appendice (pages 10 à 12).\\
+
+
+\subsection{Les groupes libres}
+\\
+Soit un groupe (G,$\cdot$) noté multiplicativement. Dorénavant lorsque nous parlons de G il faut faire attention au contexte, car il se peut que nous fassions une abréviation de notation en faisant référence au groupe (G,$\cdot$) et non à l'ensemble G.\\
+\\
+\begin{definitionbox}
+\underline{Définitions}:\\
+
+1) Soit G un groupe noté multiplicativement.\\
+G est dit \textit{\textbf{groupe libre (de base S)}} si:\\
+$\exists S \subset G$ tel que $\forall g \in G, \exists! {(s_i_1, s_i_2,\dots,s_i_n)} \in S^n$ avec $n \in  \mathbb{N}$, tel que $g=s^{k_1}_{i_1}s^{k_2}_{i_2},\dots,s^{k_n}_{i_n}$ , avec $k_i \in \mathbb{Z}$ $\forall i \in [\![1,n]\!]$, et $s_j\neq s_{j+1}$ \hspace{0.05cm}$ \forall j\in [\![1,n-1]\!]$. (Si n=0 nous posons g=1).\\
+
+2) Soit G un groupe qui agit sur un ensemble X, et $E \subset X$.\\
+\textbf{\textit{E est G-paradoxal}} ou \textbf{\textit{E est paradoxal sur G}} si: \\
+Pour $n,m \in \mathbb{N}^{*}}$, il existe des sous-ensembles de E disjoints deux à deux; $A_1, \dots, A_n, B_1, \dots, B_m$ et des éléments de G; $g_1, \dots, g_n, h_1, \dots, h_m$ tel que :\\
+\begin{center}
+$E = \bigcup g_i(A_i) = \bigcup h_j(B_j)$
+\end{center}
+\end{definitionbox}
+
+\subsection{Mot d'un ensemble}\\
+\\
+\\
+Soit X = $\{x_i\}_{i \in I}$ un ensemble, et $X^{-1}$ un ensemble équipotent à X dont on note les éléments $x_i^{-1}$.
+\\
+\begin{definitionbox}
+\underline{Définitions}: 
+\\
+
+1) \textit{\textbf{Un mot}} sur un ensemble X est une suite finie composée d'éléments de X.
+Plus particulièrement, un mot x sur l'ensemble $ X \bigcup X^{-1}$ est une suite écrite de la façon suivante:\begin{center} $x = x^{\epsilon_1}_{i_1} x^{\epsilon_2}_{i_2} \dots x^{\epsilon_n}_{i_n}$, où  $\epsilon_i = \pm 1$, $i_k \in I$ \hspace{0.05cm} $\forall k \in [\![1,n]\!]$, $n\in \mathbb{N}$\end{center}\\
+
+Lorsque $n=0$, on pose par convention $x=1$.
+\\
+
+2) \textit{\textbf{La longueur d'un mot x}} est le chiffre " n " ci dessus dans l'expression de x. C'est le nombre d'éléments de X que composent ce mot. On la note l(x).\\
+\\\textbf{Remarque}: 1 est l'unique mot de longueur 0.
+\\
+
+3) \textit{\textbf{Deux mots x et y sont égaux}}, 
+\begin{center}$x = x^{\epsilon_1}_{i_1} x^{\epsilon_2}_{i_2} \dots x^{\epsilon_n}_{i_n}$ et $y = x^{\gamma_1}_{j_1} x^{\gamma_2}_{j_2} \dots x^{\gamma_n}_{j_m}$  $(n,m \in \mathbb{N})$ \end{center} 
+
+si $n=m$, \hspace{0.05cm} $i_k=j_k$ et $\epsilon_k=\gamma_k$ \hspace{0.05cm} $\forall k \in [\![1,n]\!]$.
+\\
+
+Autrement dit, deux mots sont égaux si leurs longueurs sont égales et les lettres qui composent les deux mots sont égales de rang à rang.
+\end{definitionbox}
+\\
+\\
+\textbf{Remarque}: L'ensemble des mots d'un ensemble X est noté $X^{*}$
+\\ On définit sur $X^{*}$ un produit par concaténation des mots. Pour illustrer ce produit considérons $x = x^{\epsilon_1}_{i_1} x^{\epsilon_2}_{i_2} \dots x^{\epsilon_n}_{i_n}$ et $y = x^{\gamma_1}_{j_1} x^{\gamma_2}_{j_2} \dots x^{\gamma_n}_{j_m}$ définis précédemment dans $(X\bigcup X^{-1})^{*}$.\\
+Dans ce cas : 
+\begin{center}$xy=x = x^{\epsilon_1}_{i_1} x^{\epsilon_2}_{i_2} \dots x^{\epsilon_n}_{i_n}x^{\gamma_1}_{j_1} x^{\gamma_2}_{j_2} \dots x^{\gamma_n}_{j_m}$ \end{center}\\
+Posons par convention $1x=x1=x$.\\
+
+\\~\\
+\begin{definitionbox}
+\underline{Définitons}:
+\\
+
+4) \textit{\textbf{Deux mots, x et y de $(X \bigcup X^{-1})^{*}$, sont \underline{adjacents}}} si $\exists t_{1},t_{2} \in (X \bigcup X^{-1})^{*}$ et $a \in X \bigcup X^{-1}$ tels que:
+\begin{center} $x = t_{1}t_{2}$ et $y=t_{1}aa^{-1}t_{2}$, \underline{\textbf{ou}}, $x = t_{1}aa^{-1}t_{2}$ et $y = t_{1}t_{2}$\end{center}
+
+\textbf{Notation}: Si x et y sont \textbf{adjacents}, on écrira cela x$\mathcal{A}$y .
+\\
+
+5) \textbf{\textit{La relation $\mathcal{R}$}} est définie sur $(X\bigcup X^{-1})^{*}$ de la façon suivante:
+
+
+\begin{center}
+$x\mathcal{R}y$ $\Leftrightarrow$ \Bigr[ \exists $t_{1},\dots, t_{n}$ \in $(X\bigcup X^{-1})^{*}$ tels que $x=t_{1}$, $y=t_{n}$, et $t_{i}\mathcal{A}t_{i+1} $\hspace{0.1cm} \forall i \in [\![1,n-1]\!] \Bigr]\\
+\end{center}
+\end{definitionbox}
+\\~\\
+
+\parindent 0mm a) \underline{Lemme}:
+ $\mathcal{R}$ est une relation d'équivalence.\\
+
+ \\
+
+
+\textbf{Notation}: Pour x \in $(X\bigcup X^{-1})^{*}$, on notera [x] sa classe dans $(X\bigcup X^{-1})^{*}$/$\mathcal{R}$
+\\
+
+\parindent 0mm b) \underline{Lemme}:
+$\mathcal{R}$ est compatible avec la loi multiplicative interne de $(X\bigcup X^{-1})^{*}$.\\
+
+
+\\
+
+\\ \parindent 0mm c) \underline{Théorème}:
+L'ensemble $(X\bigcup X^{-1})^{*}$/$\mathcal{R}$ est un groupe pour la loi multiplicative de $(X \bigcup X^{-1})^{*}$.\\
+
+
+
+\begin{definitionbox}
+\underline{Définitions}:
+\\
+
+6) \textbf{\textit{Un mot x}} \in $(X \bigcup X^{-1})^{*}$ \textbf{\textit{est dit \underline{réduit}}} si:\\
+$x=1$ ou bien si $x=a_1 \dots a_n$, avec $a_i \in X \bigcup X^{-1} \hspace{0.05cm}$ tel que $a_i \neq a_{i+1}$, $\forall i \in [\![1,n-1]\!]$.
+
+\end{definitionbox}
+\\~\\
+d) \underline{Proposition}: $\forall \hspace{0.05cm} Y \in (X\bigcup X^{-1})^{*}$/$\mathcal{R}$, $\exists! x \in Y$ tel que x soit réduit.
+\begin{center}
+    $\Updownarrow$
+\end{center}
+\begin{center}
+Chaque classe d'équivalence de $(X \bigcup X^{-1})^{*}$ pour la relation $\mathcal{R}$ contient un seul mot réduit.
+\end{center} \\~\\
+
+
+
+e)\underline{Lemme}:
+Si deux mots sont adjacents leurs formes réduites sont égales.
+\\
+
+
+f)\underline{Lemme}: Deux mots équivalents et réduits sont égaux.
+\\
+
+
+
+
+\pagebreak
+\section{\underline{Définition et Théorèmes importants}}\\~\\
+
+
+Nous rentrons désormais dans le vif du sujet. Après avoir vu un bon nombre de définitions, lemmes, théorèmes, et propositions, nous nous lançons dans les définitions et théorèmes que l'on étudie généralement pour la première fois lorsque l'on s'intéresse au Paradoxe de Banach Tarski, et nous finirons par le théorème principale.\\~\\
+
+\begin{definitionbox}
+\underline{Démonstration}:
+Soit w, mot non vide en $\phi,\phi^{-1},\rho,\rho^{-1}$.\\
+w=\phi^{\pm1}\hspace{2cm}
+  $  w\begin{pmatrix}
+1 \\
+0 \\
+0
+\end{pmatrix} & =\begin{pmatrix}
+1 \\
+\pm{2\sqrt{2}} \\
+0
+\end{pmatrix} / 3^{1}\\$
+
+On montre par recurrence que  $w & = \phi^{\pm1}w'
+\begin{pmatrix}
+1 \\
+0 \\
+0
+\end{pmatrix}=
+\begin{pmatrix}
+a'\mp 4b' \\
+(b'\pm 2a')\sqrt{2} \\
+3c'
+\end{pmatrix}/3^{k+1}$
+
+
+\end{definitionbox}\\~\\
+
+\textbf{Notation}: \begin{itemize}
+    \item Lorsqu'on dit que pour deux groupes (F,.) et (G,*), "G est F-paradoxal" on fait évidémment référence dans un premier temps à l'ensemble G, c'est une abrévation de notation.
+    \item Lorsque l'on dit pour un groupe (G,*), "G est G-paradoxal", on fait souvent une abréviation en disant "G est paradoxal".
+\end{itemize}\\~\\
+
+a) \underline{Théorème}: Un groupe libre F de rang 2 est F-paradoxal, avec F agissant à gauche sur lui même et par multiplication.\\
+
+\textit{Démonstration}:\\
+Posons F un groupe libre de rang 2, de générateurs $\sigma$ et $\tau$.
+Il convient de prendre uniquement la forme réduite des mots de F pour définir F, comme c'est un groupe.\\
+Donc $F= \Bigl\{ x = x_{i_1} \dots x_{i_n}}$, tels que $x_{i_k} \in \{\sigma^{\pm1}, \tau^{\pm1}\} \hspace{0.1cm} \forall k \in [\![1,n]\!]$ et $x_{i_k} \neq x_{i_{k+1}} \forall i \in [\![1,n-1]\!]\Bigl\} \bigcup \Bigl\{1_F\Bigl\}$.\\
+Dans cette définition de F tout les mots de F sont réduits, donc pas égales.\\
+Nous posons M(p) := $\Bigl\{$des mots de F commençant par p}, avec $p \in {\tau, \tau^{-1}, \sigma, \sigma^{-1}}\Bigl\}$.\\
+Par définition de F ayant comme générateur $\tau$ et $\sigma$, et $M(p_1) \bigcap M(p_2) = \emptyset$ comme les éléments de F sont réduits, nous observons que: $\hspace{0.2cm} F = \Bigl\{1_F\Bigl\} \bigsqcup M(\sigma) \bigsqcup M(\sigma^{-1}) \bigsqcup M(\tau) \bigsqcup M(\tau^{-1})$.\\
+
+Nous allons désormais trouver une décomposition paradoxal de F.
+
+Observons que: $pM(p^{-1}) \bigcup M(p) = F$.\\
+En effet cela revient à prouver que $F \setminus M(p) \subset \hspace{0.1cm} pM(p^{-1})$ comme par définition $pM(p^{-1}) \subset F$.\\
+Or si l’on prend $x \in F \setminus M(p) \Rightarrow$ la première lettre de x n’est pas p $\Rightarrow p^{-1}x$ est réduit $\Rightarrow p^{-1}x \in M(p^{-1}) \Leftrightarrow x \in pM(p^{-1})$.
+\\
+Nous avons donc que $\tau M(\tau^{-1}) \bigcup M(\tau) = \sigma M(\sigma^{-1}) \bigcup M(\sigma) = F$.\\
+En résumé nous avons: 
+\begin{center}
+    $ \Bigr[ M(\tau) \bigcap M(\tau^{-1}) \bigcap M(\sigma) \bigcap M(\sigma^{-1}) = \emptyset$ et $\tau M(\tau^{-1}) \bigcup M(\tau) = \sigma M(\sigma^{-1}) \bigcup M(\sigma) = F \Bigr] \Rightarrow$ F est paradoxal.
+\end{center}
+\begin{flushright}
+$\square$
+\end{flushright}\\
+\\~\\
+
+\pagebreak
+
+b) \underline{\textbf{Proposition}}: \\
+
+i) Soit G un groupe paradoxal qui agit sur un ensemble X sans point fixe non-trivial, alors X est G-paradoxal.\\
+ii) X est F paradoxal si F, un groupe libre de rang 2, agit sur X sans point fixe non trivial.\\
+
+\textit{Démonstration}:\\
+
+i) \\
+Comme G est paradoxal, $\exists n,m \in \mathbb{N}$ tel que: \\
+$\exists A_1, \dots, A_n, B_1, \dots, B_m \subset G$ disjoints deux à deux, $g_1, \dots, g_n, h_1, \dots, h_m \in G$, et $G = \bigcup_{i=1}^{n}g_iA_i = \bigcup_{j=1}^mh_jB_j$.
+Or G agit sur X sans point fixe non trivial $\Leftrightarrow \forall g \in G \setminus \{1_G\},$ et $x \in X, g \cdot x \neq x$.
+
+Nous allégerons la notation désormais, nous remplacerons $g \cdot x$ par gx.
+
+Considérons l'ensemble des G-orbites de X, et par l'axiome du choix, nous pouvons choisir un élément de chaque classe pour former un ensemble, que nous noterons M, qui contient exactement un seul élément de chaque G-orbite.
+
+Montrons que $\forall q_1, q_2 \in G $ tel que $q_1 \neq q_2, q_1M \bigcap q_2M = \emptyset$.
+
+Supposons $\exists z \in q_1M \bigcap q_2M \Leftrightarrow \exists m_1, m_2 \in M $ tel que $z = q_1m_1 = q_2m_2 \Leftrightarrow m_1 = q_1^{-1}q_2m_2 \Leftrightarrow \exists x_1, x_2 \in X$ et$ p_1, p_2 \in G$ tel que $z = q_1p_1x_1 = q_2p_2x_2 \Leftrightarrow x_1 = p^{-1}_1q^{-1}_1q_2p_2x_2 \Leftrightarrow x_1 \in Gx_2 \Leftrightarrow Gx_1 = Gx_2\Leftrightarrow m_1$ et $m_2\in Gx_2 \Leftrightarrow m_1 = m_2$ par définition de M $\Leftrightarrow q_1^{-1}q_2 = 1_G$ (car G agit sur X sans point fixe trivial) $\Leftrightarrow q_1 = q_2$, ce qui est une contradiction.\\
+Donc $q_1M \bigcap q_2M = \emptyset$.
+
+Or $\forall x \in X, \exists! (m,g) \in M\ times G$ tel que $m = gx \Rightarrow Gm = Ggx = Gx =$ G-orb(x). Donc $\forall a \in$ \{G-orbite de x, tel que x $\in X\}, \exists! m \in M$ tel que $Gm=a$.
+$\Rightarrow GM = \{gm$ tel que $g \in G, m \in M \} = \bigcup_{m \in M} Gm = \bigcup_{x \in X} G-orb(x) = X.$
+Donc $GM = X$
+
+Mais G est paradoxal $\hspace{0.2 cm } \Longrightarrow$
+    $\hspace{0.2 cm }X = GM = \Bigl( \bigcup_{i=1}^ng_iA_i \Bigl)M = \Bigl(\bigcup_{i=1}^mh_jB_j\Bigl)M$\\
+\begin{center}
+   $ X =  \bigcup_{i=1}^ng_i\Bigl(A_i M\Bigl) = \bigcup_{i=1}^mh_j\Bigl(B_j M\Bigl)$
+\end{center}
+
+Il suffit désormais de prouver que:\\
+$\forall i \neq j \hspace{0.2cm} A_iM \bigcap A_jM = B_iM \bigcap B_jM = \emptyset,\hspace{0.2cm}$ et que $\forall (i,j) \in [\![1,n]\!] \times [\![1,m]\!] \hspace{0.15cm} A_iM \bigcap B_jM = \emptyset. $\\
+
+Supposons que $\exists z \in A_iM \bigcap A_jM$:
+\begin{center}
+    $\Longrightarrow \exists k_1, k_2 \in G$ avec $k_1 \neq k_2$ car $A_i \bigcup A_j = \emptyset$ et $m_1, m_2 \in M$ tel que $z = k_1m_1 = k_2m_2$, et $\exists r_1, r_2 \in G, \hspace{0.12cm} x_1,x_2 \in X$ tel que $m_1=r_1x_1, m_2=r_2x_2$.\\
+    $\Leftrightarrow x_1=r_1^{-1}k_1^{-1}k_2r_2x_2$\\
+    $\Leftrightarrow x_1 \in Gx_2$\\
+    $\Leftrightarrow x_2 \in Gx_1$\\
+    $\Leftrightarrow m_1, m_2 \in Gx_2$\\
+    $\Leftrightarrow Gx_1 = Gx_2$\\
+    $\Leftrightarrow m_1 = m_2$ par définition de M.\\
+    $\Leftrightarrow k_1 = k_2$ contradiction.
+\end{center}
+
+Nous avons donc que $A_iM \bigcap A_jM = \emptyset.$
+Le raisonnement est similaire pour les deux autre cas, nous la referons donc pas.\\
+
+Si nous revenons à notre équation nous avons $X =  \bigcup_{i=1}^ng_i\Bigl(A_i M\Bigl) = \bigcup_{i=1}^mh_j\Bigl(B_j M\Bigl)$, avec $\forall i \neq j \hspace{0.2cm} A_iM \bigcap A_jM = B_iM \bigcap B_jM = \emptyset,\hspace{0.2cm}$ et $\forall (i,j) \in [\![1,n]\!] \times [\![1,m]\!] \hspace{0.15cm} A_iM \bigcap B_jM = \emptyset.$\\
+
+Il suffit maintenant de poser $A_i^{*} = A_iM \hspace{0.18cm} \forall i$, et $B_j^{*}=B_jM \hspace{0.18cm} \forall j$, et nous trouvons $X =  \bigcup_{i=1}^ng_iA_i^{*} = \bigcup_{i=1}^mh_jB_j^{*}$.\\
+
+X est donc G paradoxal.\\
+
+ii)\\
+C'est uniquement le résultat du "Théorème a) 3." et de la première partie "i)" de cette proposition.\\
+Un groupe libre F de rang 2 est F paradoxal d'après le "théorème a) 3.", donc d'après "proposition b) i) 3.", si F agit sur X sans point fixe non trivial, alors X est F paradoxal.\\
+\begin{flushright}
+$\square$
+\end{flushright}\\
+\\~\\
+
+
+\\~\\
+c) \underline{Théorème}: Il existe deux rotations indépendantes $\phi$ et $\rho$ autour d'axes passants par l'origine dans $\mathbb{R}^3$. De ce fait, $SO_3$ a sous-groupe libre d'ordre 2.
+
+\\~\\
+Posons $\phi$ et $\rho$, 2 rotations d'angles $arccos(1/3)$ radian autour des axes z et x dans $\mathbb{R}^3$.\\
+La stratégie pour montrer que ces deux rotations sont indépendantes est de montrer par récurence que tout $w$(mot formé par les deux rotations définies ci-dessus), ne laisse jamais le vecteur $(1,0,0)$ invariant(En montrant que la deuxième coordonnée ne peut jamais être nulle).
+
+\\~\\
+\textit{Démonstration}:\\
+Soit $w$ un mot réduit non vide en $(\phi, \phi^{-1}, \rho, \rho^{-1})$ et $k$, un entier naturel représentant la longueur du mot.\\
+Quitte à conjuguer,on se restreint au mot commencant par $\phi$ pour $k=1$:
+\\
+\begin{center}
+$w=\phi^{\pm 1}$ \\
+\end{center}
+
+\begin{flalign*}
+    w\begin{pmatrix}
+1 \\
+0 \\
+0
+\end{pmatrix} & = \begin{pmatrix}
+\frac{1}{3} & \mp\frac{2\sqrt{2}}{3} & 0 \\
+\pm\frac{2\sqrt{2}}{3} & \frac{1}{3} & 0 \\
+0 & 0 & 1
+\end{pmatrix} \begin{pmatrix}
+1 \\
+0 \\
+0
+\end{pmatrix} \\
+& = \begin{pmatrix}
+1 \\
+\pm{2\sqrt{2}} \\
+0
+\end{pmatrix} / 3^{1}
+\end{flalign*}
+Cette relation fonctionne également pour le deuxième cas.
+Supposons-la vraie pour $k\in \mathbb{N}$.\\
+Notons $w$ le nouveau mot de longueur $k+1$ , on peut donc noter \hspace{0.2cm}$w=\phi^{\pm}w'$ ou $\rho^{\pm1}w'$.\\
+Par hypothèse de récurence: $ w'\begin{pmatrix}
+1 \\
+0 \\
+0
+\end{pmatrix}=\begin{pmatrix}
+a' \\
+b'\sqrt{2} \\
+c'
+\end{pmatrix}/3^k$, avec a',b',c' des entiers, donc:\\
+\begin{flalign*}
+w & = \phi^{\pm1}w'\begin{pmatrix}
+1 \\
+0 \\
+0
+\end{pmatrix} = \phi^{\pm}\begin{pmatrix}
+a' \\
+b'\sqrt{2} \\
+c'
+\end{pmatrix}/3^k \\
+& = \begin{pmatrix}
+\frac{1}{3} & \mp\frac{2\sqrt{2}}{3} & 0 \\
+\pm\frac{2\sqrt{2}}{3} & \frac{1}{3} & 0 \\
+0 & 0 & 1
+\end{pmatrix} \begin{pmatrix}
+a' \\
+b'\sqrt{2} \\
+c'
+\end{pmatrix}/3^k \\
+& = \begin{pmatrix}
+a'\mp 4b' \\
+(b'\pm 2a')\sqrt{2} \\
+3c'
+\end{pmatrix}/3^{k+1}
+\end{flalign*}
+
+\begin{flalign*}
+    w & = \rho^{\mp1}\begin{pmatrix}
+        a' \\ b'\sqrt{2} \\ c'
+    \end{pmatrix} / 3^k \\
+    & = \begin{pmatrix}
+        1 & 0 & 0 \\
+        0 & \frac{1}{3} & \mp\frac{2\sqrt{2}}{2} \\
+        0 & \pm\frac{2\sqrt{2}}{3} & \frac{1}{3} \\
+    \end{pmatrix} \begin{pmatrix}
+        a' \\ b'\sqrt{2} \\ c'
+    \end{pmatrix}/3^k \\
+    & = \begin{pmatrix}
+    3a' \\ (b'\mp 2c')\sqrt{2} \\ c' \pm 4b'
+\end{pmatrix}/3^{k+1}
+\end{flalign*}
+\\~\\
+La récurence est donc validée.
+Montrons maintenant que la deuxieme coordonnée n'est jamais divisible par 3.
+Il y a 4 cas:
+\\
+\begin{center}
+  $w=\phi^{\pm1}\rho^{\pm1}w''$,$w=\phi^{\pm1}\phi^{\pm1}w''$,$w=\rho^{\pm1}\rho^{\pm1}w''$,$w=\phi^{\pm1}\phi^{\pm1}$ \\
+  On fait le calcul uniquement pour le 1er cas:
+\end{center}
+
+
+\begin{flalign*}
+    \phi^{\pm1}\rho^{\pm1} & = \begin{pmatrix}
+        \frac{1}{3} & \mp\frac{2\sqrt{2}}{3} & 0 \\
+        \pm\frac{2\sqrt{2}}{3} & \frac{1}{3} & 0 \\
+        0 & 0 & 1 \\
+    \end{pmatrix} \begin{pmatrix}
+        1 & 0 & 0 \\
+        0 & \frac{1}{3} & \mp\frac{2\sqrt{2}}{3} \\
+        0 & \pm\frac{2\sqrt{2}}{3} & \frac{1}{3} \\
+    \end{pmatrix} \\
+    & = \begin{pmatrix}
+        \frac{1}{3} & \mp\frac{2\sqrt{2}}{9} & \frac{+8}{9} \\
+        \pm\frac{2\sqrt{2}}{3} & \frac{1}{9} & \mp\frac{2\sqrt{2}}{9} \\
+        0 & \frac{2\sqrt{2}}{3} & \frac{1}{3} \\
+    \end{pmatrix} \\
+\end{flalign*}
+\begin{flalign*}
+    wx & = \phi^{\pm1}\rho^{\pm1}w''(1,0,0) \\
+    & = \begin{pmatrix}
+        \frac{1}{3} & \pm\frac{2\sqrt{2}}{9} & \frac{+8}{9} \\
+        \pm\frac{2\sqrt{2}}{3} & \frac{1}{9} & \pm\frac{2\sqrt{2}}{9} \\ 
+        0 & \frac{2\sqrt{2}}{3} & \frac{1}{3} \\
+    \end{pmatrix} \begin{pmatrix}
+        a'' \\ b''\sqrt{2} \\ c''
+    \end{pmatrix}/3^k \\
+    & = \begin{pmatrix}
+        3a''\mp 4b'' + 8c'' \\
+        (\pm 6a'' + b'' \mp 2c'')\sqrt{2} \\
+        12b'' + 3c''
+    \end{pmatrix}/3^{k+2}
+\end{flalign*} 
+
+$\pm2c''$ est un multiple de 3.(on remarque que la 3-ème coordonnée est toujours multiple de 3.\par
+$\pm6a''$ est un multiple de 3.\par
+$b''$ n'est pas multiple de 3.\par
+Donc la 2ème coordonnée n'est pas multiple de 3. \par
+
+\begin{flushright}
+$\square$
+\end{flushright}\\
+\\~\\
+d) \underline{Théorème}: Il existe un sous-ensemble dénombrable $D$ de $S^2$ tel que $S^2 \backslash D$  est $SO_3$- paradoxal.
+\\~\\
+
+\textit{Démonstration}:\\
+Notons $ D $, l'ensemble des points fixes de $F$ ($F$ est le groupe libre avec les deux rotations du théorème précédent). \par
+On sait que cet ensemble est dénombrable. En effet, chaque rotation  admet deux points fixes et $F$ possède un nombre dénombrable d'élément. ($F$ est un groupe libre donc les éléments de F sont des mots). \par
+\\~\\
+Supposons que $F$ n'opère pas dans $S^2\backslash D$, alors il existe $w \in F$ et $ x \in S^2\backslash D $ tel que : $ wx \notin S^2\backslash D$ 
+\begin{flalign*}
+    \Rightarrow & \quad wx \in D \\
+    \Rightarrow & \quad \exists v \in F \backslash\left\{ 1 \right\} , vwx=wx\\
+    \Rightarrow & \quad w^{-1}vwx = x \\ vu \quad que\quad $x\notin D$
+    \Rightarrow & \quad w^{-1}vw = 1\\ 
+    \Rightarrow & \quad vw = w\\
+  \end{flalign*}           
+Mais $w$ est inversible, donc la dernière égalité implique que $v = 1$ ce qui est impossible.
+\\~\\
+En resumé: $F$ agit sur  $S^2\backslash D $ sans points fixes non triviaux. De plus, $F$ est $F$-paradoxal.
+\\~\\
+On peut donc affirmer à l'aide de la "proposition b) 3." que :
+$S^2\backslash D$ est $F$-paradoxal , il est donc $SO_3$-paradoxal.
+
+
+
+
+
+
+\begin{flushright}
+$\square$
+\end{flushright}\\
+\\~\\
+
+
+\pagebreak
+\begin{definitionbox}
+\underline{Démonstration}:\\
+Notons $ E= \bigcup_{i=1}^{n}{E_{\imath}}$ et $ E'= \bigcup_{i=1}^{n}{k_iE'_{\imath}}$, \hspace{} et par hypothèse:$E=\bigcup_{j=1}^{n}{g_j }A_{j}=\bigcup_{j=1}^{n}{h_j} B_j$.\\
+Posons $A_{jil}=A_j \cap E_i \cap g_{j}^{-1}E'_l}$\\
+\begin{tikzpicture}
+    
+    \node (eq1) {$A_{jil}}$};
+    \node[right=4cm of eq1] (eq2) {$k_iA_j\cap k_iE_i \cap k_jg^{-1}_jE'_l\Bigl) \hspace{0.15cm} \subset \hspace{0.15cm} E'_i $};
+    \node[below=2cm of eq1] (eq3) {$g_jA_j\cap g_jE_i\cap E'_l$};
+    \node[right=3cm of eq3] (eq4) {$\Bigl(k_lg_jA_j\cap k_lg_jE_i\cap k_lE'_l\Bigl)\hspace{0.15cm} \subset \hspace{0.15cm} E'$};
+
+    \draw[->] (eq1) -- (eq2) node[midway,above] {$k_i$};
+    \draw[->] (eq1) -- (eq3) node[midway,right] {$g_j$};
+    \draw[->] (eq2) -- (eq4) node[midway,right] {$k_{lgj}k_i^{-1}$};
+    \draw[->] (eq3) -- (eq4) node[midway,above] {$k_l$};
+\end{tikzpicture}\\
+$A'_{jil}=k_{i}A_j \cap k_iE_i \cap k_ig_{j}^{-1}E'_l}$\\
+\begin{center}
+     $\bigcup_{j,i,l}{k_lg_jk_i^{-1}A'_{jil}}= \dots = \bigcup_lk_lE'_l = E'\\
+\end{center}
+   
+
+\end{definitionbox}
+
+\begin{definitionbox}
+    \underline{Démonstration}:\\
+    Mq $\exists \rho \in \left[ 0,2\pi \right[$ tq la famille $ (\rho^nD)_{n\ge0}$ est deux à deux disjoints.\\
+    Posons $A$, l'ensemble des angles de rotations $\theta$, et montrons $A$ est dénombrable:\\
+    \begin{center}
+        $ A = \left\{ \theta\in \left[ 0,2\pi[ \right} /\exists n\in \mathbb{N}, \exists P\in \mathbb{D}, R_\theta^n(P)\in D } \right\} = \dots \\ \hspace{0.25cm}=  \bigcup_{P\in D}^{}\bigcup_{Q\in D}^{} \bigcup_{n\in \mathbb{N}}^{} \left\{ \theta \in [0,2\pi[ /\exists n\in \mathbb{N}, R_{n\theta} P=Q \right\} $ \\
+    \end{center}
+  \begin{equation*}
+  \overline{D}=\bigcup_{n\ge 0}^{}\rho^nD ,\qquad D\cap \rho^nD=\phi, \qquad \theta \in [0,2\pi[ \backslash A
+  \end{equation*}
+  $\overline{D} = D\cup \rho \overline{D}$ union d'ensembles disjoints.\\
+  
+  $S^2$ et $S^2\backslash \overline{D}$ sont $SO_3$-équidécomposable.
+\end{definitionbox}
+
+\\~\\
+
+e) \underline{Théorème}: Supposons que $G$ agit sur $X$ et $E,E'$ , deux sous-ensembles $G$-équidécomposable de $X$. Si $E$ est $G$-paradoxal alors $E'$ l'est aussi.
+
+\\~\\
+\textit{Démonstration}:\\ 
+Grace aux hypothèses, notons $ E= \bigcup_{i=1}^{n}{E_{\imath}}$ et $ E'= \bigcup_{i=1}^{n}{k_iE'_{\imath}}$
+\\
+\\
+De plus, on sait que E est $G$-paradoxal donc: $E=\bigcup_{j=1}^{n}{g_j }A_{j}=\bigcup_{j=1}^{n}{h_j} B_j$.
+\\~\\
+
+\begin{center}
+%Demba voici ou le schéma commence
+\begin{tikzpicture}
+    
+    \node (eq1) {$A_{jil}}$};
+    \node[right=4cm of eq1] (eq2) {$k_iA_j\cap k_iE_i \cap k_jg^{-1}_jE'_l\Bigl) \hspace{0.15cm} \subset \hspace{0.15cm} E'_i $};
+    \node[below=2cm of eq1] (eq3) {$g_jA_j\cap g_jE_i\cap E'_l$};
+    \node[right=3cm of eq3] (eq4) {$\Bigl(k_lg_jA_j\cap k_lg_jE_i\cap k_lE'_l\Bigl)\hspace{0.15cm} \subset \hspace{0.15cm} E'$};
+
+    \draw[->] (eq1) -- (eq2) node[midway,above] {$k_i$};
+    \draw[->] (eq1) -- (eq3) node[midway,right] {$g_j$};
+    \draw[->] (eq2) -- (eq4) node[midway,right] {$k_{lgj}k_i^{-1}$};
+    \draw[->] (eq3) -- (eq4) node[midway,above] {$k_l$};
+\end{tikzpicture}
+%Demba voici où le schéma finit
+\end{center}
+\\~\\
+\\
+Posons $A_{jil}=A_j \cap E_i \cap g_{j}^{-1}E'_l}$
+\\~\\
+
+$A'_{jil}=k_{i}A_j \cap k_iE_i \cap k_ig_{j}^{-1}E'_l} $
+
+
+\begin{center}
+
+$ \bigcup_{j,i,l}{k_lg_jk_i^{-1}A'_{jil}} \\=
+\bigcup_{j,i,l}{k_lg_jA_j \cap k_lg_jE_i \cap k_lE'_l} \\=
+\bigcup_{i,l}{k_l}\bigcup_{j}\Bigr[g_jA_j \cap g_jE_i \cap E'_l\Bigr] \\
+= \bigcup_{i,l}k_l\Bigr[E'_l \cap \bigcup_j g_j (A_j \cap E_i)\Bigr] \\
+=\bigcup_{l}{k_l} \bigcup_{i}\Bigr[E'_l \cap \bigcup_{j}{g_j(A_j \cap E_i)\Bigr] \\
+=\bigcup_{l}k_l \Bigr[E'_l \cap \bigcup_{i,j}g_j(A_j \cap E_i)\Bigr] \\
+=\bigcup_lk_l\Bigr[E'_{l} \cap \bigcup_j \bigcup_ig_jA_j\cap g_jE_i\Bigr]\\
+=\bigcup_lk_l \Bigr[E'_l \cap \bigcup_j(g_jA_j\cap(\bigcup_ig_jE_i))\Bigr]\\
+=\bigcup_lk_l \Bigr[E'_l\cap (\bigcup_jg_jA_j \cap g_jE)\Bigr]\\
+=\bigcup_lk_l\Bigr[E'_l \cap E \Bigr]\\
+=\bigcup_lk_lE'_l = E'\\
+\end{center}
+
+Ca fonctionne de la meme manière, si on pose:
+$B_{jil}=B_j \cap E_i \cap g_{j}^{-1}E'_l}$ , puis
+$B'_{jil}=k_{i}B_j \cap k_iE_i \cap k_ig_{j}^{-1}E'_l}$.
+\\
+Donc on a bien une décomposition $G$-équidécomposable de $E'$
+
+\begin{flushright}
+$\square$
+\end{flushright}\\
+\\~\\
+
+f) \underline{Théorème}:Si $D$ est un sous-ensemble dénombrable de $S^{2}$, alors $S^{2}$ et $S^{2}\setminus D$
+ sont $SO_{3}$-équidécomposable. 
+\\~\\
+\textit{Démonstration}:
+
+Justifions tout d'abord, l'existance d'une rotation $\rho \in \left[ 0,2\pi \right[$ verifiant que la famille $ (\rho^nD)_{n\ge0}$ soit une famille d'ensembles tous deux à deux disjoints.
+\\~\\
+Pour cela, posons $A$, l'ensemble des angles de rotations $\theta$ (donc $A \subseteq [0,2\pi[$) tel que $D\cap  R_\theta^nD\neq \phi$, où $R_\theta^n$ est une matrice de rotation $n\theta$ de $SO_3$). Montrons que $A$ est un ensemble dénombrable:
+
+%\begin{flalign*} 
+\begin{center}
+    
+   $ A & = \left\{ \theta\in \left[ 0,2\pi[ \right} /\exists n\in \mathbb{N}, \exists P\in \mathbb{D}, R_\theta^n(P)\in D } \right\}\\
+    & = \bigcup_{P\in D}^{}\bigcup_{Q\in D}^{} \left\{ \theta \in [0,2\pi[ /\exists n\in \mathbb{N}, R_{\theta}^{n}(P)= Q \right\} \\
+    & = \bigcup_{P\in D}^{}\bigcup_{Q\in D}^{} \bigcup_{n\in \mathbb{N}}^{} \left\{ \theta \in [0,2\pi[ /\exists n\in \mathbb{N}, R_{n\theta} P=Q \right\} $ \\
+\end{center}
+%\end{flalign*} \par
+Or $\left\{ \theta \in [0,2\pi[ /\exists n\in \mathbb{N}, R_{n\theta} P=Q \right\}$ est un ensemble comptant au maximum 1 éléments. (En effet, entre deux points $P$ et $Q$ de l'ensemble $D$, où bien il existe un axe de rotation qui ne rencontre pas un élement de $D$ permettant de relier $P$ et $Q$ par une rotation, ou bien cette axe n'existe pas: l'ensemble est donc vide.)
+\\
+Donc par union dénombrable, A est denombrable donc $[0,2\pi[ \backslash A$ est non vide! 
+\\
+Enfin en posant: \begin{equation*}
+    \overline{D}=\bigcup_{n\ge 0}^{}\rho^nD ,\qquad D\cap \rho^nD=\phi, \qquad \rho \in [0,2\pi[ \backslash A
+\end{equation*} \par
+On obtient alors, $S^2=\overline{D}\cup (S^2\backslash\overline{D})$ et comme $\overline{D} = D\cup \rho \overline{D}$ est une union d'ensembles disjoints:\par
+\begin{equation*}
+    \Rightarrow \quad S^2\backslash D=\rho \overline{D}\cup (S^2\backslash \overline{D})
+\end{equation*} \par
+Donc $S^2$ et $S^2\backslash \overline{D}$ sont $SO_3$-équidécomposable. 
+
+\begin{flushright}
+$\square$
+\end{flushright}\\~\\
+\\
+
+
+\end{Démonstrartion}
+
+\\~\\
+$S^2$ et $S^2\backslash \overline{D}$ sont $SO_3$-équidécomposable, donc d'après le théorème e), $S^2$ est donc $SO_3$-équidécomposable.\\
+
+Le paradoxe de Banach Tarski n'est donc pas un paradoxe au sens mathématique, mais bel et bien un théorème en bonne et due forme!\\
+
+
+{\Large \underline{CQFD}}
+
+\pagebreak
+\section{\underline{Appendice}}\\~\\
+
+Vous trouverez ci-dessous les différentes remarques et démonstrations de résultats de la partie 2.2 en ordre.\\~\\
+
+\textbf{\underline{2.2 Mot d'un ensemble:}}\\~\\
+
+\underline{Page 2}\\
+
+\textbf{Remarque}: L'ensemble des mots d'un ensemble X est noté $X^{*}$
+\\ On définit sur $X^{*}$ un produit par concaténation des mots. Pour illustrer ce produit considérons $x = x^{\epsilon_1}_{i_1} x^{\epsilon_2}_{i_2} \dots x^{\epsilon_n}_{i_n}$ et $y = x^{\gamma_1}_{j_1} x^{\gamma_2}_{j_2} \dots x^{\gamma_n}_{j_m}$ définis précédemment dans $(X\bigcup X^{-1})^{*}$.\\
+Dans ce cas : 
+\begin{center}$xy=x = x^{\epsilon_1}_{i_1} x^{\epsilon_2}_{i_2} \dots x^{\epsilon_n}_{i_n}x^{\gamma_1}_{j_1} x^{\gamma_2}_{j_2} \dots x^{\gamma_n}_{j_m}$ \end{center}\\
+Posons par convention $1x=x1=x$.\\
+
+\textbf{\textit{Suite}}\\
+On remarque que ce produit est associatif, que 1 est élément neutre, mais cependant $(X \bigcup X^{-1})^{*}$ n'est pas un groupe. En effet, il suffit de voir que $\forall x \in (X\bigcup X^{-1})^{*}\setminus\{1\}$, x n'a pas d'inverse puisque soit x,y $\in (X\bigcup X^{-1})^{*}\setminus\{1\}$, $l(xy)=l(x)+l(y)\neq0$ \Rightarrow \hspace{0.05cm} $xy \neq 1$. (Nous ne considérons pas les cas triviaux où x ou y = 1, que vous pourrez faire par vous même.) \\
+Pour rémédier à ce problème nous allons chercher à définir une relation d'équivalence $\mathcal{R}$ tel que $(X\bigcup X^{-1})^{*}/\mathcal{R}$ soit un groupe pour le produit défini ci dessus.\\~\\
+
+\underline{Page 3}:\\
+
+\parindent 0mm a) \underline{Lemme}:
+ $\mathcal{R}$ est une relation d'équivalence.\\
+
+ \\
+ \textit{Démonstration}: Il suffit de vérifier que \forall x,y,z \in $(X\bigcup X^{-1})^{*}$:
+ \begin{itemize}
+     \item x$\mathcal{R}$x, en effet prenons a = 1.
+     
+     \item x$\mathcal{R}$y $\Rightarrow$ y$\mathcal{R}$x, il suffit de vérifier que t_{i}$\mathcal{A}$t_{i+1}  $\Rightarrow t_{i+1}\mathcal{A}t_{i}$ et le résultat en déroule.
+     
+     \item $\bigr[x\mathcal{R}y$ et $y\mathcal{R}z\bigr]$ $\Rightarrow x\mathcal{R}z$, or il suffit d'écrire les deux expressions et l'on obtient:
+     
+    $(x=t_1)\mathcal{A}t_2,\dots, t_{n-1}\mathcal{A}(t_n=y),(t_n=y)\mathcal{A}t_{n+1},\dots, t_{n+m-1}\mathcal{A}(t_{n+m}=z)$ $\Leftrightarrow$ x$\mathcal{R}$z. \\
+    \begin{flushright}
+        $\square$
+    \end{flushright}
+        
+ \end{itemize} \\~\\
+
+\underline{Page 3}:\\
+
+\parindent 0mm b) \underline{Lemme}:
+$\mathcal{R}$ est compatible avec la loi multiplicative interne de $(X\bigcup X^{-1})^{*}$.\\
+
+\textit{Démonstration}: Soient x,y,z \in $(X\bigcup X^{-1})^{*}$:
+\begin{itemize}
+    \item x$\mathcal{A}$y $\Rightarrow$ xz$\mathcal{A}$yz \\
+    Pour le vérifier il suffit de voir que pour $x=t_1t_2$ et $y=t_1aa^{-1}t_2$, alors si nous posons $t_2z=z'$, nous obtenons $xz=t_1z'$ et $yz=t_1aa^{-1}z'$ et donc xz$\mathcal{A}$yz.
+    \item x$\mathcal{R}$y $\Rightarrow$ xz$\mathcal{R}$yz\\
+    Pour le verifier il suffit de poser ce que x$\mathcal{R}$y veut dire, et d'appliquer la propiété\\
+    $t_i\mathcal{A}t_{i+1}$$\Rightarrow$ $t_iz\mathcal{A}t_{i+1}z$ et nous obtenons le résultat recherché. \\
+\end{itemize}
+\\
+
+\\
+La relation $\mathcal{R}$ est donc compatible à droite pour la loi de $(X\bigcup X^{-1})^{*}$, et un raisonnement similaire prouve la compatibilité à gauche.
+\begin{flushright}
+        $\square$
+\end{flushright}
+\\
+
+\underline{Page 3}:\\
+
+\\ \parindent 0mm c) \underline{Théorème}:
+L'ensemble $(X\bigcup X^{-1})^{*}$/$\mathcal{R}$ est un groupe pour la loi multiplicative de $(X \bigcup X^{-1})^{*}$.\\
+
+\textit{Démonstration}:
+Par l'étude des groupes quotient lors des semestre précédents, nous savons que la loi interne de $(X \bigcup X^{-1})^{*}$/$\mathcal{R}$ induite par celle $(X\bigcup X^{-1})^{*}$ est associative et possède un élément neutre. Il suffit donc de démontrer que chaque [x] \in $ (X \bigcup X^{-1})^{*}$/$\mathcal{R}$ possède un inverse.\\
+Soit x \in $ (X \bigcup X^{-1})^{*}$, si l'on pose $t_1=t_2=1$ nous avons bien:\\
+$\bigr[xx^{-1}=t_1xx^{-1}t_2$ et $1=t_1t_2\bigr] \Rightarrow xx^{-1}\mathcal{A}1 \Rightarrow xx^{-1}\mathcal{R}1$ . De même façon, $x^{-1}x\mathcal{R}1$ .
+\begin{center}
+De ce fait, \forall x \in $ (X \bigcup X^{-1})^{*}$, $[x]^{-1}=[x^{-1}]$ .   
+\end{center}\\
+\\
+La projection canonique nous donne quant à elle:
+\begin{center}
+    $\pi(xy) = [xy] = [x][y] = \pi(x)\pi(y)$.
+\end{center}\\
+
+De ce fait, \forall x \in $(X \bigcup X^{-1})^{*}$ avec
+    $x=x^{\epsilon_1}_{i_1}\dots x^{\epsilon_n}_{i_n}$, et $\epsilon=\pm1$: 
+
+\begin{center}
+    $[x]$ est inversible par $[x]^{-1}=\bigr([x^{\epsilon_1}_{i_1}]\dots [x^{\epsilon_n}_{i_n}]\bigr)^{-1}=[x^{-\epsilon_n}_{i_n}]\dots[x^{-\epsilon_1}_{i_1}]=[x^{-\epsilon_n}_{i_n} \dots x^{-\epsilon_1}_{i_1}]$. 
+\end{center}
+\begin{flushright}
+$\square$
+\end{flushright}\\
+
+\underline{Page 3}:\\
+\\~\\
+d) \underline{Proposition}: $\forall \hspace{0.05cm} Y \in (X\bigcup X^{-1})^{*}$/$\mathcal{R}$, $\exists! x \in Y$ tel que x soit réduit.
+\begin{center}
+    $\Updownarrow$
+\end{center}
+\begin{center}
+Chaque classe d'équivalence de $(X \bigcup X^{-1})^{*}$ pour la relation $\mathcal{R}$ contient un seul mot réduit.
+\end{center} \\~\\
+
+\textit{Démonstration}:\\~\\
+Montrons son existence d'abord. Soit Y \in $(X\bigcup X^{-1})^{*}$/$\mathcal{R}$. Y est par définition non vide.
+Donc $\exists x \in (X\bigcup X^{-1})^{*}$ tel que $x \in Y$. Deux possibilités s'annoncent:
+\begin{itemize}
+    \item Si x est réduit, cela conclu le cas.
+    \item Sinon, x est non réduit $\Leftrightarrow$ \Bigr[$x=a_1 \dots a_i a_{i+1} \dots a_n$ tel que $a_i^{-1}=a_{i+1}$, avec $i \in [\![1,n-1]\!]$\Bigr]\\
+    $\Rightarrow$ 
+      $\Bigr[\exists u \in (X\bigcup X^{-1})^{*}$ tel que $u\mathcal{A}x$ (donc $u\mathcal{R}x \Leftrightarrow u \in Y$), et $l(u) < l(x)$,\\
+    .  $\hspace{0.3cm}$ avec $u=a_1 \dots a_{i-1} a_{i+2} \dots a_n$ ou $u=1. \Bigr]$
+    \end{itemize}
+   
+Or comme la fonction l est à valeurs positives, nous arrivons en un nombre fini d'étapes à un mot réduit. 
+\\~\\
+Son existence démontré, montrons son unicité:\\
+Soit $x \in (X\bigcup X^{-1})^{*}$. Nous avons $x=x_1 \dots x_n$ pour $n \in \mathbb{N}^{*}$, et $x_i \in X\bigcup X^{-1} \hspace{0.2cm}\forall i \in [\![1,n]\!]$.\\
+On pose $u_0=1,\hspace{0.2cm} u_1=x_1,\hspace{0.2cm} u_2=x_1x_2 \text{ si } x_1 \neq x_2^{-1} \text{ sinon } u_2=1$.\\
+De façon générale nous posons: $u_{i+1}=u_ix_{i+1}$ si la dernière lettre de $u_i \neq x_{i+1}$, sinon on pose $u_{i+1}=u_{i-1}$.
+Par définition chaque mot $u_i$ est réduit et $u_{i}\mathcal{R} x_1\dots{x_i}$ et donc $x=u_n$.\\
+On appelle $u_n$ \textbf{\textit{la forme réduite}} de x, on la note r(x).
+Pour démontrer l'unicité du mot réduit nous devons utiliser et démontrer les deux lemmes suivants:\\~\\
+
+
+\hline \\~\\
+\textit{Reprise de la démonstration après la barre noire horizontale suivante}\\~\\
+
+e)\underline{Lemme}:
+Si deux mots sont adjacents leurs formes réduites sont égales.
+\\
+
+\textit{Démonstration}:\\
+Soient $x=x_1\dots x_kx_{k+1}\dots x_n$ et $y=x_1\dots x_kaa^{-1}x_{k+1}\dots x_n$ deux mots adjacents. Alors les suites $u_i$ et $v_i$ respectives, définies dans la démonstration de la "proposition d) 2.2" ci dessus, nous donnent que $u_0=v_0, \dots, u_k=v_k$. Montrons que $u_k=v_{k+2}$.\\
+\begin{itemize}
+    \item Si le dernier terme de $u_{k} \neq a^{-1}$ alors $u_k=v_k$ puis $v_{k+1}=v_ka, v_{k+2}=v_k=u_k$.
+    \item Si le dernier terme de $u_{k}=a^{-1}$, nous avons $u_k=ta^{-1}$, mais comme $u_k$ est réduit, t ne finit pas en a.\\
+    Donc $u_k=v_k$, puis $v_{k+1}=t, v_{k+2}=ta^{-1}=u_k$.
+\end{itemize}\\
+On en déduit que $\forall j \in [\![0,n-k]\!], u_{k+j}=v_{k+2+j}$, donc que $u_n=v_{n+2}$.
+De ce fait, $r(x)=r(y)$.\\
+\begin{flushright}
+$\square$
+\end{flushright}\\~\\
+
+f)\underline{Lemme}: Deux mots équivalents et réduits sont égaux.
+\\
+
+\textit{Démonstration}:\\
+Soient x et y $\in (X\bigcup X^{-1})^{*})$ tels que $r(x)=x,  r(y)=y$ et $x\mathcal{R}y$. \\ $\Rightarrow \exists t_1, \dots, t_n$ tels que $x=t_1, y=t_n$, et $t_i\mathcal{A}t_{i+1} \hspace{0.12cm} \forall t \in [\![1,n-1]\!]$.
+En appliquant le "Lemme e) 2.2" aux formes réduites de chaque $t_i$ nous obtenons que $x=r(t_1)=\dots=r(t_n)=y$.
+Nous trouvons bel et bien que $x=y$.\\
+\begin{flushright}
+$\square$
+\end{flushright}\\
+
+\hline \\~\\
+
+\textit{Reprise de la démonstration de la "Proposition d) 2.2"}\\~\\
+
+Avec les deux lemmes précédents et l'existence d'un réduit pour chaque classe, nous voyons que les réduit pour tout les éléments d'une seule classe sont égales et que ce réduit appartient à la classe même. 
+Cela démontre donc l'existence de l'unique réduit pour chaque classe de $(X\bigcup X^{-1})^{*})/\mathcal{R}$.\\
+\begin{flushright}
+$\square$
+\end{flushright}\\
+
+\textbf{Notation}:\\
+
+Notons $L_{(X\bigcup X^{-1})^{*}}$ l'ensemble des mots réduits de chaque classe appartenant à $(X\bigcup X^{-1})^{*})/\mathcal{R}$.\\
+
+\warning \hspace{0.1cm} \textbf{Remarque Importante}:\\
+
+Si l'on considère la loi interne définie sur $L_{(X\bigcup X^{-1})^{*}}$ par $(r(x),r(y)) \longmapsto r(xy)$, nous obtenons un groupe dans lequel tout élément x s'écrit de manière unique:
+\begin{center}
+    $x=x_{i_1}^{n_1} \dots x_{i_k}^{n_k}$, \hspace{0.1cm}avec $i_1, \dots, i_k \in \mathbb{N}$, \hspace{0.1cm} $n_1, \dots, n_k \in \mathbb{Z}$, \hspace{0.1cm} $x_{i_1}, \dots, x_{i_n} \in X$, et $x_{i_j} \neq x_{i_{j+1}}$.
+\end{center}\\
+
+Remarquons également que l'application qui à un élément A de $(X\bigcup X^{-1})^{*}/\mathcal{R}$ associe son unique mot réduit r(a) de $L_{(X\bigcup X^{-1})^{*}}$, avec $a \in A$, induit un isomorphisme de groupes de $(X\bigcup X^{-1})^{*}/\mathcal{R}$ sur $L_{(X\bigcup X^{-1})^{*}}$.\\
+\pagebreak
+
+\section{\underline{Sources}}\\~\\
+
+Nous avons utilisé les sources suivantes pour rédiger notre mémoire:\\~\\
+
+Algèbre 1, Daniel Guin et Thomas Hausberger
+\\~\\
+The Banach Tarski Paradox, Stan Wagon
+\\~\\
+Logique; Chapitre IV. L’axiome du choix, Patrick Dehornoy
+
+\end{document}
+
